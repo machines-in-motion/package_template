@@ -68,4 +68,4 @@ public:
     std::string get_error() const;
 };
 
-};  // namespace package_template
+}  // namespace package_template
