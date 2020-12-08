@@ -20,13 +20,18 @@ find_package(yaml_utils REQUIRED)
 find_package(mpi_cmake_modules REQUIRED)
 find_package(pybind11_vendor REQUIRED)
 find_package(pybind11 REQUIRED)
-ament_export_dependencies(mpi_cmake_modules yaml_utils pybind11)
+ament_export_dependencies(
+    ament_cmake
+    ament_cmake_python
+    yaml_utils
+    mpi_cmake_modules
+    pybind11_vendor
+    pybind11)
 
 
 # prepare to export all needed targets
 set(all_targets)
-set(all_target_exports)
-
+ament_export_interfaces(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
 
 ###########
 # Library #
@@ -41,10 +46,7 @@ target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(${PROJECT_NAME} yaml_utils::yaml_utils)
-ament_export_interfaces(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
 list(APPEND all_targets ${PROJECT_NAME})
-list(APPEND all_target_exports export_${PROJECT_NAME})
-
 
 ###################
 # Python wrappers #
@@ -59,11 +61,11 @@ set_target_properties(${PROJECT_NAME}_cpp_bindings
 target_include_directories(
   ${PROJECT_NAME}_cpp_bindings
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-         $<INSTALL_INTERFACE:include> SYSTEM
+         $<INSTALL_INTERFACE:include>
   PUBLIC ${PYTHON_INCLUDE_DIRS})
 _ament_cmake_python_get_python_install_dir()
 install(TARGETS ${PROJECT_NAME}_cpp_bindings DESTINATION ${PYTHON_INSTALL_DIR})
-
+list(APPEND all_targets ${PROJECT_NAME}_cpp_bindings)
 
 ######################
 # Python Native code #
@@ -86,7 +88,7 @@ add_documentation()
 install(DIRECTORY include/ DESTINATION include)
 install(
   TARGETS ${all_targets}
-  EXPORT ${all_target_exports}
+  EXPORT export_${PROJECT_NAME}
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin
