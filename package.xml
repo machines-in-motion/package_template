@@ -25,6 +25,7 @@
   
   <depend>mpi_cmake_modules</depend>
   <depend>pybind11_vendor</depend>
+  <depend>pybind11</depend>
   <depend>yaml_utils</depend>
 
   <test_depend>ament_cmake_gtest</test_depend>
