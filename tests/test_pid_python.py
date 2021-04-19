@@ -65,6 +65,7 @@ class PID_TESTCASE(unittest.TestCase):
 
     def test_integral(self):
         """Testing integral integrates, except if ki is zero."""
+
         class Config:
             kp, kd, ki = 1, 1, 1
 

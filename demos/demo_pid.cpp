@@ -23,7 +23,8 @@
 void run_demo()
 {
     // PID controller with default gains values
-    package_template_cpp::PID& controller = package_template_cpp::get_default_pid();
+    package_template_cpp::PID& controller =
+        package_template_cpp::get_default_pid();
 
     // example of force computation
     double current_position = 1;
