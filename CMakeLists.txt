@@ -19,6 +19,7 @@ find_package(pybind11 REQUIRED)
 
 # prepare to export all needed targets
 set(all_targets)
+set(all_exec_targets)
 
 #
 # Library
@@ -52,6 +53,36 @@ target_include_directories(
 get_python_install_dir(python_install_dir)
 install(TARGETS ${PROJECT_NAME}_cpp_bindings DESTINATION ${python_install_dir})
 list(APPEND all_targets ${PROJECT_NAME}_cpp_bindings)
+
+#
+# Demos
+#
+# demo_pid_load_from_file
+add_executable(${PROJECT_NAME}_demo_pid_load_from_file
+               demos/demo_pid_load_from_file.cpp)
+target_include_directories(
+  ${PROJECT_NAME}_demo_pid_load_from_file
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:include>
+  PUBLIC ${PYTHON_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME}_demo_pid_load_from_file ${PROJECT_NAME})
+target_compile_definitions(
+  ${PROJECT_NAME}_demo_pid_load_from_file
+  PUBLIC
+    TEST_PID_GAINS_YAML_FILE_PATH="${PROJECT_SOURCE_DIR}/config/test_pid_gains.yaml"
+)
+list(APPEND all_exec_targets ${PROJECT_NAME}_demo_pid_load_from_file)
+# demo_pid
+add_executable(${PROJECT_NAME}_demo_pid demos/demo_pid.cpp)
+target_include_directories(
+  ${PROJECT_NAME}_demo_pid
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:include>
+  PUBLIC ${PYTHON_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME}_demo_pid ${PROJECT_NAME})
+list(APPEND all_exec_targets ${PROJECT_NAME}_demo_pid)
+# append to all target
+list(APPEND all_targets ${all_exec_targets})
 
 #
 # Unit tests
@@ -102,9 +133,24 @@ install(
   EXPORT ${PROJECT_NAME}Targets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
   INCLUDES
   DESTINATION include)
+
+# Install symlink in bin for the executables as well
+foreach(target ${all_exec_targets})
+  # install a symlink of the executable in lib/teststand
+  string(
+    CONCAT symlink_command
+           "execute_process("
+           "  COMMAND ${CMAKE_COMMAND} -E make_directory "
+           "  ${CMAKE_INSTALL_PREFIX}/bin/)\n"
+           "execute_process("
+           "  COMMAND ${CMAKE_COMMAND} -E create_symlink "
+           "  ${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME}/${target}"
+           "  ${CMAKE_INSTALL_PREFIX}/bin/${target} )")
+  install(CODE ${symlink_command})
+endforeach(target ${all_exec_targets})
 
 # install the python package too
 get_python_install_dir(python_install_dir)

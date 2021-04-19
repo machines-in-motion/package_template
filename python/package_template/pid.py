@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 
-## @namespace package_template.pid
 """ Brief description of the pid module.
 
     More advanced description of this module, e.g.
     This module contains a 1D PID controller and utilities for managing the
     gains and the controller parameters.
 
-    @file pid.py
-    @copyright Copyright (c) 2017-2019,
-               New York University and Max Planck Gesellschaft,
-               License BSD-3-Clause
+    Copyright (c) 2017-2019, New York University and Max Planck Gesellschaft,
+    License BSD-3-Clause
 """
 
 
@@ -24,7 +21,6 @@ class DefaultConfiguration(object):
 
     Configuration object with default values for kp, kd and ki
     can be used as input argument to create an instance of PID
-    @see PID
 
     Attributes:
         kp: Proportional gain.

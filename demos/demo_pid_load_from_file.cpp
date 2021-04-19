@@ -16,8 +16,8 @@
  */
 
 #include <stdexcept>
-#include "package_template_cpp/file_configuration.hpp"
-#include "package_template_cpp/pid.hpp"
+#include "package_template/file_configuration.hpp"
+#include "package_template/pid.hpp"
 
 /**
  * @brief Run some demo using a YAML file as configuration for the PID
@@ -42,12 +42,12 @@ void run_demo()
 
     // Gains_configuration is the base class for all configuration, including
     // the one read from yaml file, as done here.
-    package_template_cpp::File_configuration gains =
-        package_template_cpp::File_configuration(config_file_path);
+    package_template::File_configuration gains =
+        package_template::File_configuration(config_file_path);
 
     // printing to standard output the gains
     std::cout << "gains read from configuration file:" << std::endl;
-    package_template_cpp::print_configuration(gains);
+    package_template::print_configuration(gains);
 
     // checking reading the config file when fine
     // if not, throwing corresponding error
@@ -59,7 +59,7 @@ void run_demo()
     /* creating and running the controller */
 
     // PID controller creation
-    package_template_cpp::PID controller(gains);
+    package_template::PID controller(gains);
 
     // example of force computation
     double current_position = 1;

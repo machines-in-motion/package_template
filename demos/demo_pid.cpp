@@ -15,7 +15,7 @@
  * illustrates in the simplest way the use of the PID class API.
  */
 
-#include "package_template_cpp/pid.hpp"
+#include "package_template/pid.hpp"
 
 /**
  * @brief Creates a PID controller and use the API in a small demo.
@@ -23,8 +23,8 @@
 void run_demo()
 {
     // PID controller with default gains values
-    package_template_cpp::PID& controller =
-        package_template_cpp::get_default_pid();
+    package_template::PID& controller =
+        package_template::get_default_pid();
 
     // example of force computation
     double current_position = 1;
