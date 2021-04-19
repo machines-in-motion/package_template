@@ -13,9 +13,10 @@
 
 #include <fstream>
 #include <iostream>
+
+#include "gtest/gtest.h"
 #include "package_template/file_configuration.hpp"
 #include "package_template/pid.hpp"
-#include "gtest/gtest.h"
 
 // more info:
 // http://www.ibm.com/developerworks/aix/library/au-googletestingframework.html
@@ -25,8 +26,7 @@
 
 #define YAML_CONFIG_FILE "package_template_unit_test.yaml"
 
-/* ******************************* setup of test *******************************
- */
+/* **************** setup of test *************** */
 
 // in setup for test, we write the yaml file that will be used
 // to test File_configuration. In TearDown, we delete the file.
@@ -48,8 +48,7 @@ protected:
     }
 };
 
-/* ******************************* testing DefaultConfiguration
- * ******************************* */
+/* **************** testing DefaultConfiguration **************** */
 
 TEST_F(PID_tests, default_configuration_test)
 {
@@ -60,8 +59,7 @@ TEST_F(PID_tests, default_configuration_test)
     ASSERT_EQ(config.has_error(), false);
 }
 
-/* ******************************* testing File_configuration
- * ******************************* */
+/* **************** testing File_configuration **************** */
 
 TEST_F(PID_tests, file_configuration_ok_test)
 {
@@ -78,10 +76,8 @@ TEST_F(PID_tests, file_configuration_fail_test)
     ASSERT_EQ(config.has_error(), true);
 }
 
-/* ******************************* testing File_configuration
- * ******************************* */
-/* ******************************* with default configuration file
- * ******************************* */
+/* **************** testing File_configuration **************** */
+/* **************** with default configuration file **************** */
 
 TEST_F(PID_tests, read_config_file_test)
 {

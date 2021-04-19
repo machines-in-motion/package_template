@@ -64,18 +64,24 @@ if(BUILD_TESTING)
   # Config folder
   get_filename_component(CONFIG_PATH config ABSOLUTE)
   # create the executable
-  add_executable(test_${PROJECT_NAME}_cpp tests/main.cpp tests/unit_tests.cpp)
+  add_executable(test_${PROJECT_NAME}_cpp tests/main.cpp tests/test_pid_cpp.cpp)
   # link to the created librairies and its dependencies
   target_link_libraries(test_${PROJECT_NAME}_cpp ${PROJECT_NAME} GTest::gtest)
   # create 2 macro: the path to the config file and the path to the data file
   target_compile_definitions(
-      test_${PROJECT_NAME}_cpp
-      PUBLIC
-      CONFIG_PATH="${CONFIG_PATH}"
-      TEST_PID_GAINS_YAML_FILE_PATH="${CONFIG_PATH}/test_pid_gains.yaml"
-  )
+    test_${PROJECT_NAME}_cpp
+    PUBLIC CONFIG_PATH="${CONFIG_PATH}"
+           TEST_PID_GAINS_YAML_FILE_PATH="${CONFIG_PATH}/test_pid_gains.yaml")
   # declare the test as gtest
   gtest_add_tests(TARGET test_${PROJECT_NAME}_cpp)
+
+  find_package(Python REQUIRED)
+  if(Python_EXECUTABLE)
+    add_test(
+      NAME test_${PROJECT_NAME}_python
+      COMMAND ${Python_EXECUTABLE} -m pytest -v --full-trace
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
+  endif()
 endif()
 
 #
