@@ -110,8 +110,14 @@ if(BUILD_TESTING)
   if(Python_EXECUTABLE)
     add_test(
       NAME test_${PROJECT_NAME}_python
-      COMMAND ${Python_EXECUTABLE} -m pytest -v --full-trace
+      COMMAND ${Python_EXECUTABLE} -m pytest -v
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
+    set_tests_properties(
+      test_${PROJECT_NAME}_python
+      PROPERTIES
+        ENVIRONMENT
+        "PYTHONPATH=${PROJECT_SOURCE_DIR}/python:${CMAKE_BINARY_DIR}:$ENV{PYTHONPATH}"
+    )
   endif()
 endif()
 

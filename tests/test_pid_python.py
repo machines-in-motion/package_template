@@ -2,6 +2,7 @@
 Unit-tests for PID and related factories
 """
 
+from pathlib import Path
 import unittest
 import yaml
 import os
@@ -16,7 +17,11 @@ from package_template.pid import (
 ## set of unit-tests for PID and related factories
 class PID_TESTCASE(unittest.TestCase):
 
-    YAML_CONFIG_FILE = "pid_config_test.yaml"
+    YAML_CONFIG_FILE = (
+        Path(__file__).resolve().parent.parent
+        / "config"
+        / "pid_config_test.yaml"
+    )
 
     def setUp(self):
         """
