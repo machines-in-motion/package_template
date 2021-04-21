@@ -106,13 +106,16 @@ if(BUILD_TESTING)
   # declare the test as gtest
   gtest_add_tests(TARGET test_${PROJECT_NAME}_cpp)
 
-  find_package(Python REQUIRED)
-  if(Python_EXECUTABLE)
-    add_test(
-      NAME test_${PROJECT_NAME}_python
-      COMMAND ${Python_EXECUTABLE} -m pytest -v --full-trace
-      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
-  endif()
+  #
+  # issue on 18.04: this results in python2.7 being called
+  #
+  #find_package(Python REQUIRED)
+  #if(Python_EXECUTABLE)
+  #  add_test(
+  #    NAME test_${PROJECT_NAME}_python
+  #    COMMAND ${Python_EXECUTABLE} -m pytest -v --full-trace
+  #    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
+  #endif()
 endif()
 
 #
