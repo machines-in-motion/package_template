@@ -38,37 +38,43 @@ jobs:
         breathe
 
     - name: Create separate environment for build and source dependencies.
-      run: mkdir $BUILD_FOLDER && mkdir -p $DEVEL_FOLDER/workspace/src
+      run: >
+        mkdir ${{github.workspace}}/build &&
+        mkdir -p ${{github.workspace}}/devel/workspace/src
 
     - name: clone pybind11
       uses: actions/checkout@v2
       with:
         repository: pybind/pybind11
         ref: v2.5.0
-        path: $DEVEL_FOLDER/workspace/src
+        path: ${{github.workspace}}/devel/workspace/src
     #
     - name: clone googletest
       uses: actions/checkout@v2
       with:
         repository:  google/googletest 
-        path: $DEVEL_FOLDER/workspace/src
+        path: ${{github.workspace}}/devel/workspace/src
     #
     - name: clone mpi_cmake_modules
       uses: actions/checkout@v2
       with:
         repository:  machines-in-motion/mpi_cmake_modules
-        path: $DEVEL_FOLDER/workspace/src
+        path: ${{github.workspace}}/devel/workspace/src
     # 
     - name: clone yaml_utils
       uses: actions/checkout@v2
       with:
         repository:  machines-in-motion/yaml_utils
-        path: $DEVEL_FOLDER/workspace/src
+        path: ${{github.workspace}}/devel/workspace/src
     #
     - name: Build the dependencies.
-      working-directory: $DEVEL_FOLDER/workspace
+      working-directory: ${{github.workspace}}/devel/workspace
       shell: bash
-      run: colcon build --cmake-args -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: >
+        colcon build --cmake-args
+        -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        -DPYBIND11_TEST=OFF
+        -DBUILD_TESTING=OFF
 
     #
     # Build and test the current package.
@@ -76,21 +82,21 @@ jobs:
 
     - name: Configure CMake
       shell: bash
-      working-directory: $BUILD_FOLDER
+      working-directory: ${{github.workspace}}/build
       run: >
-        source $DEVEL_FOLDER/workspace/install/setup.bash &&
+        source ${{github.workspace}}/devel/workspace/install/setup.bash &&
         cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
     - name: Build
-      working-directory: $BUILD_FOLDER
+      working-directory: ${{github.workspace}}/build
       shell: bash
       run: >
-        source $DEVEL_FOLDER/workspace/install/setup.bash &&
+        source ${{github.workspace}}/devel/workspace/install/setup.bash &&
         cmake --build . --config $BUILD_TYPE
 
     - name: Test
-      working-directory: $BUILD_FOLDER
+      working-directory: ${{github.workspace}}/build
       shell: bash
       run: >
-        source $DEVEL_FOLDER/workspace/install/setup.bash &&
+        source ${{github.workspace}}/devel/workspace/install/setup.bash &&
         env CTEST_OUTPUT_ON_FAILURE=1 ctest -C $BUILD_TYPE
