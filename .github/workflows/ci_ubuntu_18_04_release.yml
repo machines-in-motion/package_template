@@ -47,25 +47,25 @@ jobs:
       with:
         repository: pybind/pybind11
         ref: v2.5.0
-        path: ${{github.workspace}}/devel/workspace/src
+        path: ${{github.workspace}}/devel/workspace/src/pybind11
     #
     - name: clone googletest
       uses: actions/checkout@v2
       with:
         repository:  google/googletest 
-        path: ${{github.workspace}}/devel/workspace/src
+        path: ${{github.workspace}}/devel/workspace/src/googletest
     #
     - name: clone mpi_cmake_modules
       uses: actions/checkout@v2
       with:
         repository:  machines-in-motion/mpi_cmake_modules
-        path: ${{github.workspace}}/devel/workspace/src
+        path: ${{github.workspace}}/devel/workspace/src/mpi_cmake_modules
     # 
     - name: clone yaml_utils
       uses: actions/checkout@v2
       with:
         repository:  machines-in-motion/yaml_utils
-        path: ${{github.workspace}}/devel/workspace/src
+        path: ${{github.workspace}}/devel/workspace/src/yaml_utils
     #
     - name: Build the dependencies.
       working-directory: ${{github.workspace}}/devel/workspace
