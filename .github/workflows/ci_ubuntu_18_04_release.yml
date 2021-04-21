@@ -43,7 +43,7 @@ jobs:
     - name: clone pybind11
       uses: actions/checkout@v2
       with:
-        repository: pybind11/pybind11
+        repository: pybind/pybind11
         ref: v2.5.0
         path: $DEVEL_FOLDER/workspace/src
     #
