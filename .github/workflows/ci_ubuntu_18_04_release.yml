@@ -32,20 +32,10 @@ jobs:
       
     - name: Install pip dependencies.
       run: >
-        sudo -H pip3 install "setuptools>=40.0" &&
-	      sudo -H pip3 install colcon-common-extensions
-                             treep
-                             fyplot
-                             pyside2
-                             empy
-                             flake8
-                             m2r
-                             sphinx
-                             pyjson
-                             recommonmark
-                             sphinx_rtd_theme
-                             sphinxcontrib-moderncmakedomain
-                             breathe
+        sudo -H pip3 install "setuptools>=40.0" && sudo -H pip3 install
+        colcon-common-extensions treep fyplot pyside2 empy flake8 m2r sphinx
+        pyjson recommonmark sphinx_rtd_theme sphinxcontrib-moderncmakedomain
+        breathe
 
     - name: Create separate environment for build and source dependencies.
       run: mkdir $BUILD_FOLDER && mkdir $DEVEL_FOLDER
