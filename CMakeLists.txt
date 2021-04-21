@@ -106,6 +106,7 @@ if(BUILD_TESTING)
   # declare the test as gtest
   gtest_add_tests(TARGET test_${PROJECT_NAME}_cpp)
 
+  set(Python_EXECUTABLE "python3")
   find_package(Python REQUIRED)
   if(Python_EXECUTABLE)
     add_test(
