@@ -15,6 +15,7 @@ endif()
 
 find_package(yaml_utils REQUIRED)
 find_package(mpi_cmake_modules REQUIRED)
+set(Python_EXECUTABLE "python3")
 find_package(pybind11 REQUIRED)
 
 # prepare to export all needed targets
@@ -106,7 +107,6 @@ if(BUILD_TESTING)
   # declare the test as gtest
   gtest_add_tests(TARGET test_${PROJECT_NAME}_cpp)
 
-  set(Python_EXECUTABLE "python3")
   find_package(Python REQUIRED)
   if(Python_EXECUTABLE)
     add_test(
