@@ -1,4 +1,4 @@
-name: CMake
+name: CI_UBUNTU_18_04_RELEASE
 
 on: [push]
 
@@ -38,18 +38,32 @@ jobs:
         breathe
 
     - name: Create separate environment for build and source dependencies.
-      run: mkdir $BUILD_FOLDER && mkdir $DEVEL_FOLDER
+      run: mkdir $BUILD_FOLDER && mkdir -p $DEVEL_FOLDER/workspace/src
 
-    - name: Clone the treep configuration
-      shell: bash
-      working-directory: $DEVEL_FOLDER
-      run: git clone git@github.com:machines-in-motion/treep_machines_in_motion.git
-
-    - name: Treep clone the source dependencies.
-      shell: bash
-      working-directory: $DEVEL_FOLDER
-      run: treep --clone PACKAGE_TEMPLATE
-
+    - name: clone pybind11
+      uses: actions/checkout@v2
+      with:
+        repository: pybind11/pybind11
+        path: $DEVEL_FOLDER/workspace/src
+    #
+    - name: clone googletest
+      uses: actions/checkout@v2
+      with:
+        repository:  google/googletest 
+        path: $DEVEL_FOLDER/workspace/src
+    #
+    - name: clone mpi_cmake_modules
+      uses: actions/checkout@v2
+      with:
+        repository:  machines-in-motion/mpi_cmake_modules
+        path: $DEVEL_FOLDER/workspace/src
+    # 
+    - name: clone yaml_utils
+      uses: actions/checkout@v2
+      with:
+        repository:  machines-in-motion/yaml_utils
+        path: $DEVEL_FOLDER/workspace/src
+    #
     - name: Build the dependencies.
       working-directory: $DEVEL_FOLDER/workspace
       shell: bash
