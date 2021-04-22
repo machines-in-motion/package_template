@@ -25,7 +25,7 @@ jobs:
 
       - name: Install apt dependencies.
         run: >
-          sudo apt update && sudo apt install -y  
+          sudo apt update && sudo apt install -y
           build-essential python3-pip cmake libcereal-dev	libyaml-cpp-dev
           libboost-all-dev libgtest-dev libeigen3-dev libedit-dev doxygen
           libncurses5-dev freeglut3-dev libxmu-dev git ssh lsb-release
