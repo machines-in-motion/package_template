@@ -13,7 +13,7 @@
 
 # Python 3 compatibility, has to be called just after the hashbang.
 from __future__ import print_function, division
-import os
+from pathlib import Path
 
 
 class DefaultConfiguration(object):
@@ -66,7 +66,7 @@ class ConfigFileConfiguration:
     """  Path to default configuration file, relative to the pid package """
 
     ## Relative path to the default configuration fole
-    relative_path = os.path.join("config", "test_pid_gains.yaml")
+    relative_path = str(Path("config") / "test_pid_gains.yaml")
 
 
 # "PythonPID" : to differentiate with cpp bindings PID
@@ -151,7 +151,7 @@ def _read_yaml_config_file(file_path):
     # importing yaml and reading yaml file
     import yaml
 
-    assert os.path.isfile(file_path)
+    assert Path(file_path).is_file()
     with open(file_path, "r") as f:
         yaml_load_object = yaml.load(f, Loader=yaml.Loader)
 
@@ -283,24 +283,19 @@ def get_config_file_pid(config_file_path=None, verbose=True):
     """
     if config_file_path is None:
         # getting abs path to this script
-        abs_path_script = os.path.realpath(__file__)
-        # getting name of this file
-        script = os.path.basename(abs_path_script)
-        # getting abs path of folder in which this script is
-        abs_path = abs_path_script[: -len(script)]
-        # getting abs path to config file
-        abs_path_config = os.path.abspath(
-            os.path.join(abs_path, ConfigFileConfiguration.relative_path)
+        abs_path_config = str(
+            Path(__file__).resolve().parent.parent.parent
+            / ConfigFileConfiguration.relative_path
         )
     else:
         abs_path_config = config_file_path
     # checking file exists
-    if not os.path.isfile(abs_path_config):
+    if not Path(abs_path_config).is_file():
         raise Exception(
             "failed to find configuration file: " + str(abs_path_config)
         )
     # printing path to config file if asked
     if verbose:
-        print("reading pid gains from: ", os.path.abspath(abs_path_config))
+        print("reading pid gains from: ", abs_path_config)
     # constructing and returning the controller
     return _read_yaml_config_file(abs_path_config)

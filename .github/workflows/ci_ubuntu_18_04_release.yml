@@ -1,0 +1,102 @@
+name: CI_UBUNTU_18_04_RELEASE
+
+on: [pull_request]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+  BUILD_FOLDER: ${{github.workspace}}/build
+  DEVEL_FOLDER: ${{github.workspace}}/devel
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      #
+      # build and install all dependencies.
+      #
+
+      - name: Install apt dependencies.
+        run: >
+          sudo apt update && sudo apt install -y
+          build-essential python3-pip cmake libcereal-dev	libyaml-cpp-dev
+          libboost-all-dev libgtest-dev libeigen3-dev libedit-dev doxygen
+          libncurses5-dev freeglut3-dev libxmu-dev git ssh lsb-release
+
+      - name: Install pip dependencies.
+        run: >
+          sudo -H pip3 install "setuptools>=40.0" && sudo -H pip3 install
+          colcon-common-extensions treep fyplot pyside2 empy flake8 m2r sphinx
+          pyjson recommonmark sphinx_rtd_theme sphinxcontrib-moderncmakedomain
+          breathe
+
+      - name: Create separate environment for build and source dependencies.
+        run: >
+          mkdir ${{github.workspace}}/build &&
+          mkdir -p ${{github.workspace}}/devel/workspace/src
+
+      - name: clone pybind11
+        uses: actions/checkout@v2
+        with:
+          repository: pybind/pybind11
+          ref: v2.5.0
+          path: ${{github.workspace}}/devel/workspace/src/pybind11
+      #
+      - name: clone googletest
+        uses: actions/checkout@v2
+        with:
+          repository: google/googletest
+          path: ${{github.workspace}}/devel/workspace/src/googletest
+      #
+      - name: clone mpi_cmake_modules
+        uses: actions/checkout@v2
+        with:
+          repository: machines-in-motion/mpi_cmake_modules
+          path: ${{github.workspace}}/devel/workspace/src/mpi_cmake_modules
+      #
+      - name: clone yaml_utils
+        uses: actions/checkout@v2
+        with:
+          repository: machines-in-motion/yaml_utils
+          path: ${{github.workspace}}/devel/workspace/src/yaml_utils
+      #
+      - name: Build the dependencies.
+        working-directory: ${{github.workspace}}/devel/workspace
+        shell: bash
+        run: >
+          colcon build --cmake-args
+          -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+          -DPYBIND11_TEST=OFF
+          -DBUILD_TESTING=OFF
+
+      #
+      # Build and test the current package.
+      #
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{github.workspace}}/build
+        run: >
+          source ${{github.workspace}}/devel/workspace/install/setup.bash &&
+          cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: >
+          source ${{github.workspace}}/devel/workspace/install/setup.bash &&
+          cmake --build . --config $BUILD_TYPE
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: >
+          source ${{github.workspace}}/devel/workspace/install/setup.bash &&
+          env CTEST_OUTPUT_ON_FAILURE=1 ctest -C $BUILD_TYPE
