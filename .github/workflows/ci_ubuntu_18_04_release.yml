@@ -1,6 +1,6 @@
 name: CI_UBUNTU_18_04_RELEASE
 
-on: [pull_request]
+on: [push]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
