@@ -26,6 +26,10 @@ jobs:
       # Setup the machines and build environment
       #
       - uses: machines-in-motion/mim_github_actions/setup_ubuntu18_04@master
+
+      #
+      # Clone the dependencies that needs to be built.
+      #
       - uses: machines-in-motion/mim_github_actions/treep_clone@master
         - with:
           treep_configurations: >
