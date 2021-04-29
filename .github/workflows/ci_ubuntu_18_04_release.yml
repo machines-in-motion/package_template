@@ -23,73 +23,15 @@ jobs:
       - uses: actions/checkout@v2
 
       #
-      # Activate the secret ssh key
+      # Setup the machines and build environment
       #
-      - uses: webfactory/ssh-agent@v0.5.2
-        with:
-          ssh-private-key: ${{ secrets.GA_SSH_PRIVATE_KEY }}
-
-      #
-      # build and install all dependencies.
-      #
-
-      - name: Install apt dependencies.
-        run: >
-          sudo apt update && sudo apt install -y
-          build-essential python3-pip cmake libcereal-dev	libyaml-cpp-dev
-          libboost-all-dev libgtest-dev libeigen3-dev libedit-dev doxygen
-          libncurses5-dev freeglut3-dev libxmu-dev git ssh lsb-release
-
-      - name: Install pip dependencies.
-        run: >
-          sudo -H pip3 install "setuptools>=40.0" && sudo -H pip3 install
-          colcon-common-extensions treep fyplot pyside2 empy flake8 m2r sphinx
-          pyjson recommonmark sphinx_rtd_theme sphinxcontrib-moderncmakedomain
-          breathe
-
-      - name: Create separate environment for build and source dependencies.
-        run: >
-          mkdir ${{github.workspace}}/build &&
-          mkdir -p ${{github.workspace}}/devel/workspace/src
-
-      #
-      # Clone source dependencies
-      #
-      # - name: clone pybind11
-      #   uses: actions/checkout@v2
-      #   with:
-      #     repository: pybind/pybind11
-      #     ref: v2.5.0
-      #     path: ${{github.workspace}}/devel/workspace/src/pybind11
-      # #
-      # - name: clone googletest
-      #   uses: actions/checkout@v2
-      #   with:
-      #     repository: google/googletest
-      #     path: ${{github.workspace}}/devel/workspace/src/googletest
-      # #
-      # - name: clone mpi_cmake_modules
-      #   uses: actions/checkout@v2
-      #   with:
-      #     repository: machines-in-motion/mpi_cmake_modules
-      #     path: ${{github.workspace}}/devel/workspace/src/mpi_cmake_modules
-      # #
-      # - name: clone yaml_utils
-      #   uses: actions/checkout@v2
-      #   with:
-      #     repository: machines-in-motion/yaml_utils
-      #     path: ${{github.workspace}}/devel/workspace/src/yaml_utils
-      #
-      - name: clone the treep configuration
-        working-directory: ${{github.workspace}}/devel/
-        shell: bash
-        run: git clone git@github.com:machines-in-motion/treep_machines_in_motion.git
-      #
-      - name: clone source dependencies
-        working-directory: ${{github.workspace}}/devel/
-        shell: bash
-        run: treep --clone PACKAGE_TEMPLATE_DEPENDENCIES
-
+      - uses: machines-in-motion/mim_github_actions/setup_ubuntu18_04@master
+      - uses: machines-in-motion/mim_github_actions/treep_clone@master
+        - with:
+          treep_configurations: >
+            "git@github.com:machines-in-motion/treep_machines_in_motion.git"
+          projects_or_repos: "PACKAGE_TEMPLATE_DEPENDENCIES"
+      
       #
       # Build the source dependencies
       #
