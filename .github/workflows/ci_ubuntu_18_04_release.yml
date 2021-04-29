@@ -48,18 +48,6 @@ jobs:
           projects_or_repos: "PACKAGE_TEMPLATE_DEPENDENCIES"
 
       #
-      # Build the source dependencies
-      #
-      - name: Build the dependencies.
-        working-directory: ${{github.workspace}}/devel/workspace
-        shell: bash
-        run: >
-          colcon build --cmake-args
-          -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-          -DPYBIND11_TEST=OFF
-          -DBUILD_TESTING=OFF
-
-      #
       # Build and test the current package.
       #
 
