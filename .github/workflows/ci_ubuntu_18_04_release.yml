@@ -24,6 +24,14 @@ jobs:
         uses: actions/checkout@v2
 
       #
+      # Activate the secret ssh key
+      #
+      - name: Spawn ssh-agent
+        uses: webfactory/ssh-agent@v0.5.2
+        with:
+          ssh-private-key: ${{ secrets.GA_SSH_PRIVATE_KEY }}
+
+      #
       # Setup the machines and build environment
       #
       - name: Setup Ubuntu18.04.
