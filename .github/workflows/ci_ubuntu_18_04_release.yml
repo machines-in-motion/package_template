@@ -20,18 +20,21 @@ jobs:
       #
       # Checkout the current package locally
       #
-      - uses: actions/checkout@v2
+      - name: Checkout current repo.
+        uses: actions/checkout@v2
 
       #
       # Setup the machines and build environment
       #
-      - uses: machines-in-motion/mim_github_actions/setup_ubuntu18_04@main
+      - name: Setup Ubuntu18.04.
+        uses: machines-in-motion/mim_github_actions/setup_ubuntu18_04@main
 
       #
       # Clone the dependencies that needs to be built.
       #
-      - uses: machines-in-motion/mim_github_actions/treep_clone@main
-        - with:
+      - name: Treep clone.
+        uses: machines-in-motion/mim_github_actions/treep_clone@main
+        with:
           treep_configurations: >
             "git@github.com:machines-in-motion/treep_machines_in_motion.git"
           projects_or_repos: "PACKAGE_TEMPLATE_DEPENDENCIES"
