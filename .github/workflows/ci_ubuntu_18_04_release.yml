@@ -31,7 +31,7 @@ jobs:
           treep_configurations: >
             "git@github.com:machines-in-motion/treep_machines_in_motion.git"
           projects_or_repos: "PACKAGE_TEMPLATE_DEPENDENCIES"
-      
+
       #
       # Build the source dependencies
       #
