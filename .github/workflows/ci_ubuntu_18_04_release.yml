@@ -40,8 +40,8 @@ jobs:
       #
       # Clone the dependencies that needs to be built.
       #
-      - name: Treep clone.
-        uses: machines-in-motion/mim_github_actions/treep_clone@main
+      - name: Clone dependencies and build them.
+        uses: machines-in-motion/mim_github_actions/treep_clone_and_build@main
         with:
           treep_configurations: >
             "git@github.com:machines-in-motion/treep_machines_in_motion.git"
