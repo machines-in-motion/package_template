@@ -18,6 +18,12 @@ jobs:
 
     steps:
       #
+      # Setup the machines and build environment
+      #
+      - name: Setup Ubuntu18.04.
+        uses: machines-in-motion/mim_github_actions/setup_ubuntu18_04@main
+      
+      #
       # Checkout the current package locally
       #
       - name: Checkout current repo.
@@ -32,12 +38,6 @@ jobs:
           ssh-private-key: ${{ secrets.GA_SSH_PRIVATE_KEY }}
 
       #
-      # Setup the machines and build environment
-      #
-      - name: Setup Ubuntu18.04.
-        uses: machines-in-motion/mim_github_actions/setup_ubuntu18_04@main
-
-      #
       # Clone the dependencies that needs to be built.
       #
       - name: Clone dependencies and build them.
@@ -50,24 +50,3 @@ jobs:
       #
       # Build and test the current package.
       #
-
-      - name: Configure CMake
-        shell: bash
-        working-directory: ${{github.workspace}}/build
-        run: >
-          source ${{github.workspace}}/devel/workspace/install/setup.bash &&
-          cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-
-      - name: Build
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        run: >
-          source ${{github.workspace}}/devel/workspace/install/setup.bash &&
-          cmake --build . --config $BUILD_TYPE
-
-      - name: Test
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        run: >
-          source ${{github.workspace}}/devel/workspace/install/setup.bash &&
-          env CTEST_OUTPUT_ON_FAILURE=1 ctest -C $BUILD_TYPE
