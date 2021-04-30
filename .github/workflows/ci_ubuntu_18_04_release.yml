@@ -22,7 +22,7 @@ jobs:
       #
       - name: Setup Ubuntu18.04.
         uses: machines-in-motion/mim_github_actions/setup_ubuntu18_04@main
-      
+
       #
       # Checkout the current package locally
       #
