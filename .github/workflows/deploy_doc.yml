@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    types: [closed]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -48,10 +46,11 @@ jobs:
       - name: Clone dependencies and build them.
         uses: machines-in-motion/mim_github_actions/treep_clone_and_build@main
         with:
-          treep_configurations: >
-            "git@github.com:machines-in-motion/treep_machines_in_motion.git"
-          projects_or_repos: >
-            "PACKAGE_TEMPLATE_DEPENDENCIES;machines-in-motion.github.io"
+          treep_configurations: |
+            git@github.com:machines-in-motion/treep_machines_in_motion.git
+          projects_or_repos: |
+            PACKAGE_TEMPLATE_DEPENDENCIES
+            machines-in-motion.github.io
 
       #
       # Build and test the current package.
