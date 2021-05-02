@@ -67,7 +67,8 @@ jobs:
         shell: bash
         working-directory: ${{github.workspace}}
         run: |
-          code_doc_dir = $DEVEL_FOLDER/workspace/src/machines-in-motion.github.io/code_documentation/package_template
+          
+          code_doc_dir=$DEVEL_FOLDER/workspace/src/machines-in-motion.github.io/code_documentation/package_template
           rm -r $code_doc_dir
           mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir
           cd $code_doc_dir
