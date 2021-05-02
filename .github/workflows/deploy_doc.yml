@@ -1,6 +1,11 @@
-name: ci_ubuntu_18_04_release
+name: check_main_branch_and_deploy_doc
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [closed]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -45,10 +50,28 @@ jobs:
         with:
           treep_configurations: >
             "git@github.com:machines-in-motion/treep_machines_in_motion.git"
-          projects_or_repos: "PACKAGE_TEMPLATE_DEPENDENCIES"
+          projects_or_repos: >
+            "PACKAGE_TEMPLATE_DEPENDENCIES;machines-in-motion.github.io"
 
       #
       # Build and test the current package.
       #
       - name: Build and test the current package using ctest.
         uses: machines-in-motion/mim_github_actions/cmake_build_and_ctest@main
+        with:
+          cmake_args: -DGENERATE_DOCUMENTATION=ON
+
+      #
+      # Copy the compiled documentation to the github page of the group.
+      #
+      - name: Copy the documentation and upload it.
+        shell: bash
+        working-directory: ${{github.workspace}}
+        run: |
+          code_doc_dir = $DEVEL_FOLDER/workspace/src/machines-in-motion.github.io/code_documentation/package_template
+          rm -r $code_doc_dir
+          mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir
+          cd $code_doc_dir
+          git add --all
+          git commit -am "[Github action package_template] update doc"
+          git push origin master
