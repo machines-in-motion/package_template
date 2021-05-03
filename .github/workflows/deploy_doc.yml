@@ -7,6 +7,7 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  REPOSITORY_NAME: package_template
   BUILD_TYPE: Release
   BUILD_FOLDER: ${{github.workspace}}/build
   DEVEL_FOLDER: ${{github.workspace}}/devel
@@ -67,7 +68,7 @@ jobs:
         shell: bash
         working-directory: ${{github.workspace}}
         run: |
-          code_doc_dir=$DEVEL_FOLDER/workspace/src/machines-in-motion.github.io/code_documentation/package_template
+          code_doc_dir=$DEVEL_FOLDER/workspace/src/machines-in-motion.github.io/code_documentation/$REPOSITORY_NAME
           if [ -d "$code_doc_dir" ]; then
             rm -r $code_doc_dir
           fi
@@ -75,5 +76,5 @@ jobs:
           cd $DEVEL_FOLDER/workspace/src/machines-in-motion.github.io
           make
           git add --all
-          git commit -am "[Github action package_template] update doc"
+          git commit -am "[Github action $REPOSITORY_NAME] update doc"
           git push origin master
