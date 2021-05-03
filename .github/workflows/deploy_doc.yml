@@ -72,7 +72,7 @@ jobs:
             rm -r $code_doc_dir
           fi
           mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir
-          cd $code_doc_dir
+          cd $DEVEL_FOLDER/workspace/src/machines-in-motion.github.io
           make
           git add --all
           git commit -am "[Github action package_template] update doc"
