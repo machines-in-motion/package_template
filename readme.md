@@ -1,3 +1,5 @@
+[![check_main_branch_and_deploy_doc](https://github.com/machines-in-motion/package_template/actions/workflows/deploy_doc.yml/badge.svg?branch=master)](https://github.com/machines-in-motion/package_template/actions/workflows/deploy_doc.yml)
+
 package_template
 ----------------
 
