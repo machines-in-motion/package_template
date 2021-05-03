@@ -72,6 +72,7 @@ jobs:
           if [ -d "$code_doc_dir" ]; then
             rm -r $code_doc_dir
           fi
+          find $BUILD_FOLDER
           mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir
           cd $code_doc_dir
           git add --all
