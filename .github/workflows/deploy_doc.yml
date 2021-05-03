@@ -20,17 +20,17 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-      #
-      # Setup the machines and build environment
-      #
-      - name: Setup Ubuntu18.04.
-        uses: machines-in-motion/mim_github_actions/setup_ubuntu18_04@main
+      # #
+      # # Setup the machines and build environment
+      # #
+      # - name: Setup Ubuntu18.04.
+      #   uses: machines-in-motion/mim_github_actions/setup_ubuntu18_04@main
 
-      #
-      # Checkout the current package locally
-      #
-      - name: Checkout current repo.
-        uses: actions/checkout@v2
+      # #
+      # # Checkout the current package locally
+      # #
+      # - name: Checkout current repo.
+      #   uses: actions/checkout@v2
 
       #
       # Activate the secret ssh key
@@ -52,26 +52,26 @@ jobs:
             PACKAGE_TEMPLATE_DEPENDENCIES
             machines-in-motion.github.io
 
-      #
-      # Build and test the current package.
-      #
-      - name: Build and test the current package using ctest.
-        uses: machines-in-motion/mim_github_actions/cmake_build_and_ctest@main
-        with:
-          cmake_args: -DGENERATE_DOCUMENTATION=ON
+      # #
+      # # Build and test the current package.
+      # #
+      # - name: Build and test the current package using ctest.
+      #   uses: machines-in-motion/mim_github_actions/cmake_build_and_ctest@main
+      #   with:
+      #     cmake_args: -DGENERATE_DOCUMENTATION=ON
 
-      #
-      # Copy the compiled documentation to the github page of the group.
-      #
-      - name: Copy the documentation and upload it.
-        shell: bash
-        working-directory: ${{github.workspace}}
-        run: |
+      # #
+      # # Copy the compiled documentation to the github page of the group.
+      # #
+      # - name: Copy the documentation and upload it.
+      #   shell: bash
+      #   working-directory: ${{github.workspace}}
+      #   run: |
           
-          code_doc_dir=$DEVEL_FOLDER/workspace/src/machines-in-motion.github.io/code_documentation/package_template
-          rm -r $code_doc_dir
-          mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir
-          cd $code_doc_dir
-          git add --all
-          git commit -am "[Github action package_template] update doc"
-          git push origin master
+      #     code_doc_dir=$DEVEL_FOLDER/workspace/src/machines-in-motion.github.io/code_documentation/package_template
+      #     rm -r $code_doc_dir
+      #     mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir
+      #     cd $code_doc_dir
+      #     git add --all
+      #     git commit -am "[Github action package_template] update doc"
+      #     git push origin master
