@@ -73,6 +73,7 @@ jobs:
           fi
           mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir
           cd $code_doc_dir
+          make
           git add --all
           git commit -am "[Github action package_template] update doc"
           git push origin master
