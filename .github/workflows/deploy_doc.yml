@@ -69,7 +69,9 @@ jobs:
         run: |
           
           code_doc_dir=$DEVEL_FOLDER/workspace/src/machines-in-motion.github.io/code_documentation/package_template
-          rm -r $code_doc_dir
+          if [ -d "$code_doc_dir" ]; then
+            rm -r $code_doc_dir
+          fi
           mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir
           cd $code_doc_dir
           git add --all
