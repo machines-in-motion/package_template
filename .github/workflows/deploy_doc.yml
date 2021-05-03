@@ -51,7 +51,6 @@ jobs:
             git@github.com:machines-in-motion/treep_machines_in_motion.git
           projects_or_repos: |
             PACKAGE_TEMPLATE_DEPENDENCIES
-            machines-in-motion.github.io
 
       #
       # Build and test the current package.
@@ -68,13 +67,15 @@ jobs:
         shell: bash
         working-directory: ${{github.workspace}}
         run: |
-          code_doc_dir=$DEVEL_FOLDER/workspace/src/machines-in-motion.github.io/code_documentation/$REPOSITORY_NAME
-          if [ -d "$code_doc_dir" ]; then
+          cd $DEVEL_FOLDER
+          git clone git@github.com:machines-in-motion/machines-in-motion.github.io
+          code_doc_dir=$DEVEL_FOLDER/machines-in-motion.github.io/code_documentation/$REPOSITORY_NAME
+          if [ -d "$code_doc_dir/$REPOSITORY_NAME" ]; then
             rm -r $code_doc_dir
           fi
-          mkdir -p $code_doc_dir/
+          mkdir -p $code_doc_dir
           mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir/documentation
-          cd $DEVEL_FOLDER/workspace/src/machines-in-motion.github.io
+          cd $DEVEL_FOLDER/machines-in-motion.github.io
           make
           git add --all
           git commit -am "[Github action $REPOSITORY_NAME] update doc"
