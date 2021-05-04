@@ -45,6 +45,7 @@ jobs:
       # Clone the dependencies that needs to be built.
       #
       - name: Clone dependencies and build them.
+        id: clone_and_build_dep
         uses: machines-in-motion/mim_github_actions/treep_clone_and_build@main
         with:
           treep_configurations: |
@@ -55,11 +56,15 @@ jobs:
       #
       # Build and test the current package.
       #
-      - name: Build and test the current package using ctest.
-        uses: machines-in-motion/mim_github_actions/cmake_build_and_ctest@main
-        with:
-          cmake_args: -DGENERATE_DOCUMENTATION=ON
-          build_folder: $BUILD_FOLDER
+      - name: Build and run CTest.
+        shell: bash
+        run: |
+          cd $BUILD_DIR
+          echo Source environment.
+          source ${{ steps.clone_and_build_dep.outputs.setup_file }}
+          cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DGENERATE_DOCUMENTATION=ON
+          cmake --build . --config $BUILD_TYPE -DGENERATE_DOCUMENTATION=ON
+          env CTEST_OUTPUT_ON_FAILURE=1 ctest -C $BUILD_TYPE
 
       #
       # Copy the compiled documentation to the github page of the group.
