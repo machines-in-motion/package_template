@@ -84,7 +84,8 @@ jobs:
         run: |
           # Get repository name
           cd ${{github.workspace}}
-          REPOSITORY_NAME=basename "$PWD"
+          REPOSITORY_NAME="${PWD##*/}"
+          echo "repository_name=$REPOSITORY_NAME"
 
           # Clone the doc repo
           cd $DEVEL_FOLDER
