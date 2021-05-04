@@ -72,10 +72,10 @@ jobs:
           env CTEST_OUTPUT_ON_FAILURE=1 
           
           # Get the code coverage.
-          cd ${{github.workspace}}/..
-          gcovr -r $REPOSITORY_NAME
+          cd $BUILD_FOLDER
+          gcovr -r ${{github.workspace}}
           mkdir coverage
-          gcovr -r $REPOSITORY_NAME --html --html-details -o coverage/index.html
+          gcovr -r ${{github.workspace}} --html --html-details -o coverage/index.html
 
       #
       # Copy the compiled documentation to the github page of the group.
@@ -96,7 +96,7 @@ jobs:
           # Copy the generated doc and coverage in the doc repo.
           mkdir -p $code_doc_dir
           mv $BUILD_FOLDER/share/docs/sphinx/html $code_doc_dir/documentation
-          mv $BUILD_FOLDER/../coverage $code_doc_dir/
+          mv $BUILD_FOLDER/coverage $code_doc_dir/
           
           # Update the doc repo main page.
           cd $DEVEL_FOLDER/machines-in-motion.github.io
