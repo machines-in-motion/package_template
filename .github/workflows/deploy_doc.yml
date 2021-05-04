@@ -73,9 +73,9 @@ jobs:
           
           # Get the code coverage.
           cd ${{github.workspace}}/..
-          gcovr -r .
+          gcovr -r $REPOSITORY_NAME
           mkdir coverage
-          gcovr -r . --html --html-details -o code_coverage/index.html
+          gcovr -r $REPOSITORY_NAME --html --html-details -o coverage/index.html
 
       #
       # Copy the compiled documentation to the github page of the group.
