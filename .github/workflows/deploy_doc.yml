@@ -75,7 +75,7 @@ jobs:
           cd ${{github.workspace}}/..
           gcovr -r .
           mkdir coverage
-          gcovr -r . --html --html-details -o code_coverage/index.html"
+          gcovr -r . --html --html-details -o code_coverage/index.html
 
       #
       # Copy the compiled documentation to the github page of the group.
