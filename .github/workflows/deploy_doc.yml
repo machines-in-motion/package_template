@@ -83,7 +83,7 @@ jobs:
         shell: bash
         run: |
           # Get repository name
-          REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $1}')
+          REPOSITORY_NAME=${${{github.workspace}}##*/}
           echo REPOSITORY_NAME=$REPOSITORY_NAME
 
           # Clone the doc repo
