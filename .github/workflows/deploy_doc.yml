@@ -7,7 +7,6 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  REPOSITORY_NAME: package_template
   BUILD_FOLDER: ${{github.workspace}}/../build
   DEVEL_FOLDER: ${{github.workspace}}/../devel
 
@@ -83,6 +82,9 @@ jobs:
       - name: Copy the documentation and upload it.
         shell: bash
         run: |
+          # Get repository name
+          REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $1}')
+
           # Clone the doc repo
           cd $DEVEL_FOLDER
           git clone git@github.com:machines-in-motion/machines-in-motion.github.io
