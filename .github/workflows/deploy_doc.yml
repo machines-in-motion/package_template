@@ -84,6 +84,7 @@ jobs:
         run: |
           # Get repository name
           REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $1}')
+          echo REPOSITORY_NAME=$REPOSITORY_NAME
 
           # Clone the doc repo
           cd $DEVEL_FOLDER
