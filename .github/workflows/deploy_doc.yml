@@ -67,6 +67,18 @@ jobs:
           cmake --build . --config $BUILD_TYPE -DGENERATE_DOCUMENTATION=ON
           env CTEST_OUTPUT_ON_FAILURE=1 ctest -C $BUILD_TYPE
 
+
+docker exec --user bambooagent amd_18_04_python3_dgm /bin/bash -c \
+        "source /opt/ros/melodic/setup.bash && source /opt/openrobots/setup.bash && cd /workspace/software/workspace && catkin config --cmake-args -DGENERATE_DOCUMENTATION=ON -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_SHARED_LINKER_FLAGS=--coverage -DCMAKE_EXE_LINKER_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug -DPYTHON_EXECUTABLE=/usr/bin/python3"
+docker exec --user bambooagent amd_18_04_python3_dgm /bin/bash -c \
+    "source /opt/ros/melodic/setup.bash && source /opt/openrobots/setup.bash && cd /workspace/software/workspace && catkin build -i"
+docker exec --user bambooagent amd_18_04_python3_dgm /bin/bash -c \
+    "cd /workspace/software/workspace && gcovr -r ."
+mkdir -p software/workspace/code_coverage/html
+docker exec --user bambooagent amd_18_04_python3_dgm /bin/bash -c \
+    "cd /workspace/software/workspace && gcovr -r . --html --html-details -o code_coverage/html/index.html"
+
+
       #
       # Copy the compiled documentation to the github page of the group.
       #
@@ -76,7 +88,7 @@ jobs:
           cd $DEVEL_FOLDER
           git clone git@github.com:machines-in-motion/machines-in-motion.github.io
           code_doc_dir=$DEVEL_FOLDER/machines-in-motion.github.io/code_documentation/$REPOSITORY_NAME
-          if [ -d "$code_doc_dir/$REPOSITORY_NAME" ]; then
+          if [ -d "$code_doc_dir" ]; then
             rm -r $code_doc_dir
           fi
           mkdir -p $code_doc_dir
