@@ -71,7 +71,7 @@ jobs:
           env CTEST_OUTPUT_ON_FAILURE=1 
           
           # Get the code coverage.
-          cd $BUILD_FOLDER/..
+          cd $BUILD_FOLDER
           gcovr -r ${{github.workspace}} $BUILD_FOLDER
           mkdir coverage
           gcovr -r ${{github.workspace}} --html --html-details -o coverage/index.html $BUILD_FOLDER
