@@ -55,6 +55,7 @@ jobs:
       - name: Build and run CTest.
         shell: bash
         run: |
+          mkdir -p $BUILD_FOLDER
           cd $BUILD_FOLDER
           echo Source environment.
           source ${{ steps.clone_and_build_dep.outputs.setup_file }}
